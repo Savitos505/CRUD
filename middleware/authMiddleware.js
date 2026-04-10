@@ -1,15 +1,16 @@
 import jwt from 'jsonwebtoken';
-
 export default function (req, res, next) {
     if (req.method === "OPTIONS") {
         next();
     }
     try {
         const token = req.headers.authorization.split(' ')[1];
+        console.log(token);
+        
         if (!token) {
             return res.status(403).json({ message: "Пользователь не авторизован" });
         }
-        const decodedData = jwt.verify(token, "SECRET_KEY_RANDOM");
+        const decodedData = jwt.verify(token, process.env.secret_key);
         req.user = decodedData;
         next();
     } catch (e) {

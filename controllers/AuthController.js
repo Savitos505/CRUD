@@ -2,14 +2,15 @@ import Role from "../model/Role.js";
 import User from "../model/User.js"
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
-import dotenv from "dotenv"
-dotenv.config()
+
 
 
 function generateAT(id, role){
     const payload = {
         id,role
     }
+    console.log(process.env.secret_key);
+    
     return jwt.sign(payload, process.env.secret_key, {expiresIn:"24h"})
 }
 class Authcontroler{
@@ -43,8 +44,8 @@ class Authcontroler{
             if(!validPassword){
                 return res.status(400).json({message:"invalid password"})
             }
-            const token = generateAT(user._id , user.role)
-            return res.json(token)
+            const token = generateAT(user._id , user.roles)
+            return res.json({token})
 
         }catch(e){
             console.log(e);
@@ -55,6 +56,8 @@ class Authcontroler{
 
     async getUser(req,res){
         try{
+            const user =await User.find()
+            res.json(user)
 
         }catch(e){
             console.log(e);

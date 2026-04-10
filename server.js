@@ -3,7 +3,6 @@ import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import router from './router/router.js';
 
-
 const app = express()
 app.use(express.json())
 dotenv.config()
